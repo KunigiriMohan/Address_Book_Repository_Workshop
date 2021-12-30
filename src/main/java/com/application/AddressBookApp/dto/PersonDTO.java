@@ -1,6 +1,13 @@
 package com.application.AddressBookApp.dto;
 
-public class PersonDTO {
+
+import lombok.ToString;
+
+/**
+ * @ToString : To Auto Generate toString() 
+ */
+
+public @ToString class PersonDTO {
     
     public String firstName;
     public String lastName;
@@ -11,6 +18,7 @@ public class PersonDTO {
     public String state;
     public String country;
     public String address;
-    public String profilepic;
+    public String profilePic;
 
 }
+
