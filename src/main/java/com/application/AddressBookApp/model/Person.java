@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 /**
  * @Data : To generate Construcor
  * @NoArgsConstructor : To Generate No Argument Constructor.
- * @AllArgsConstructor : To Generate All Argument Constructor
+ * 
  */
 @Data
 @NoArgsConstructor
