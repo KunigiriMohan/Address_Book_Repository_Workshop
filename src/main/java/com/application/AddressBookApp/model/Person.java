@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * @Data : To generate Construcor
+ * @Data : To generate Getters and Setters
  * @NoArgsConstructor : To Generate No Argument Constructor.
  * 
  */
@@ -29,9 +29,15 @@ public class Person {
     private String profilePic;
 
 
+    /**
+     * Defining Constructor
+     * @param personDTO
+     */
     public Person(PersonDTO personDTO){
         this.updatePerson(personDTO);
     }
+
+    
     /**
      * Method to define variables of class
      */
