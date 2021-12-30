@@ -1,6 +1,6 @@
 package com.application.AddressBookApp.model;
 
-import lombok.AllArgsConstructor;
+import com.application.AddressBookApp.dto.PersonDTO;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,10 +11,11 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class Person {
 
-    
+    /**
+     * Variables of the classd
+     */
     private Long iD;
     private String firstName;
     private String lastName;
@@ -25,5 +26,25 @@ public class Person {
     private String state;
     private String country;
     private String address;
-    private String profilepic;
+    private String profilePic;
+
+
+    public Person(PersonDTO personDTO){
+        this.updatePerson(personDTO);
+    }
+    /**
+     * Method to define variables of class
+     */
+    public void updatePerson(PersonDTO personDTO){
+        this.firstName=personDTO.firstName;
+        this.lastName=personDTO.lastName;
+        this.gender = personDTO.gender;
+        this.mobileNo=personDTO.mobileNo;
+        this.emailAddress=personDTO.emailAddress;
+        this.city=personDTO.city;
+        this.state=personDTO.state;
+        this.country=personDTO.country;
+        this.address=personDTO.address;
+        this.profilePic=personDTO.profilePic;
+    }
 }
