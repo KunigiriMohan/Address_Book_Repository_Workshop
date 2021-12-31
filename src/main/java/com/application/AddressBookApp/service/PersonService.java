@@ -68,6 +68,4 @@ public class PersonService implements InterfacePerson{
     public void deletePersonData(Long personID) {
         personRepository.deleteById(personID);
     }
-    
-    
 }
