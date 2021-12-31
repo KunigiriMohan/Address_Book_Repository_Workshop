@@ -43,7 +43,7 @@ public class Personcontroller {
      * @param personID
      * @return ResponseEntity of Person Details of given ID
      */
-    @GetMapping("/get/{contactID}")
+    @GetMapping("/get/{personID}")
     public ResponseEntity<ResponseDTO> getContactByID(@PathVariable("personID") Long personID){
         Person personData = interfacePerson.getPersonDataById(personID);
         ResponseDTO responseDTO = new ResponseDTO("Get Call Success : ", personData);
@@ -68,7 +68,7 @@ public class Personcontroller {
      * @param personDTO
      * @return : ResponseEntity of Updated Person
      */
-    @PutMapping("/update/{contactID}")
+    @PutMapping("/update/{personID}")
     public ResponseEntity<ResponseDTO> updateContact(@Valid @RequestBody PersonDTO contactDTO,@PathVariable("personID") Long personID){
         Person personData = interfacePerson.updatePersonData(personID,contactDTO);
         ResponseDTO responseDTO = new ResponseDTO("Update Call Success : ",personData);
@@ -80,7 +80,7 @@ public class Personcontroller {
      * @param personID
      * @return :message showing delete ID
      */
-    @DeleteMapping("/delete/{contactID}")
+    @DeleteMapping("/delete/{personID}")
     public ResponseEntity<ResponseDTO> deleteContactByID(@PathVariable("personID") Long personID){
         interfacePerson.deletePersonData(personID);
         ResponseDTO responseDTO = new ResponseDTO("Deleted Successfull : ", personID);
