@@ -1,19 +1,12 @@
 package com.application.AddressBookApp.model;
 
-import java.util.List;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import com.application.AddressBookApp.dto.AddressBookDTO;
-import com.application.AddressBookApp.dto.PersonDTO;
-
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -39,16 +32,12 @@ import lombok.NoArgsConstructor;
 public class AddressBook {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "addressBookID")
     private Long addressBookID;
 
-    @Column(name = "addressName")
     private String addressBookName;
 
-	@OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "fk_address_ID",referencedColumnName = "addressBookID")
-    private List<Person> personList;
 
     /**
      * Defining custom Constructor 
@@ -64,7 +53,5 @@ public class AddressBook {
     */
     public void updateAddressBook(AddressBookDTO addressBookDTO){
         this.addressBookName = addressBookDTO.addressBookName;
-        this.personList = addressBookDTO.personList;
-        
     }
 }
