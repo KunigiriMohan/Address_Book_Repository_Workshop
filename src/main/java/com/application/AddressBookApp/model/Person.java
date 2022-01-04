@@ -1,10 +1,13 @@
 package com.application.AddressBookApp.model;
+
 import com.application.AddressBookApp.dto.PersonDTO;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,6 +20,7 @@ import lombok.NoArgsConstructor;
  * @Id : Creating Id in Table
  * @GeneratedValue : To Auto Generated Id
  * @Column : Declaring varible name as a Column Name
+ * @ManyToOne : Mapping person_list table to addressBookTable using Foreign Key
  * 
  */
 @Data
@@ -29,14 +33,14 @@ public class Person {
      * Variables of the class
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "personID")
     private Long personID;
     @Column(name = "name")
     private String firstName;
     private String lastName;
     private String gender;
-    private Long mobileNo;
+    private String mobileNo;
     private String emailAddress;
     private String city;
     private String state;
@@ -44,6 +48,9 @@ public class Person {
     private String address;
     private String profilePic;
 
+    @ManyToOne
+    @JoinColumn(name = "fk_person_ID",referencedColumnName = "addressBookID")
+    private AddressBook addressBook;
 
     /**
      * Defining Constructor
@@ -52,7 +59,6 @@ public class Person {
     public Person(PersonDTO personDTO){
         this.updatePerson(personDTO);
     }
-
     
     /**
      * Method to define variables of class
@@ -68,5 +74,6 @@ public class Person {
         this.country=personDTO.country;
         this.address=personDTO.address;
         this.profilePic=personDTO.profilePic;
+
     }
 }
