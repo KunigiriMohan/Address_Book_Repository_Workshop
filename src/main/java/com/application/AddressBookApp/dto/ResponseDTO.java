@@ -14,5 +14,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ResponseDTO {
     public String message;
-    public Object person;
+    public Object data;
 }

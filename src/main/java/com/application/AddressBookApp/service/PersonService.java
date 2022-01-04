@@ -1,8 +1,11 @@
 package com.application.AddressBookApp.service;
 
 import java.util.List;
+import java.util.Optional;
 import com.application.AddressBookApp.dto.PersonDTO;
+import com.application.AddressBookApp.exceptions.AddressBookCustomException;
 import com.application.AddressBookApp.model.*;
+import com.application.AddressBookApp.repository.AddressBookRepository;
 import com.application.AddressBookApp.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +21,9 @@ public class PersonService implements InterfacePerson{
     @Autowired
     PersonRepository personRepository;
 
+    @Autowired
+    AddressBookRepository addressBookRepository;
+
     /**
      * method to Show all Person Details in AddressBook
      * @return : Entered Person Data
@@ -30,42 +36,55 @@ public class PersonService implements InterfacePerson{
     /**
      * method to return Person Details by ID
      * @param : personID
+     * @param : addressBookID
      * @return : Person details of particular ID
      */
     @Override
-    public Person getPersonDataById(Long personID) {
-        return personRepository.findById(personID).get();
+    public Person getPersonDataById(Long addressBookID,Long personID) {
+        return personRepository.findById(personID).orElseThrow(()-> new AddressBookCustomException("Person ID Not Found"));
     }
 
     /**
      * method to create a Person in Address Book
      * @param : personDTO
+     * @param : addressBookID
      * @return : Entered Person Data
      */
     @Override
-    public Person createPersonData(PersonDTO personDTO) {
+    public Person createPersonData(Long addressBookID,PersonDTO personDTO) {
         Person personData = new Person(personDTO);
+        Optional<AddressBook> addressBook = addressBookRepository.findById(addressBookID);
+        if(addressBook.isPresent()){
+            personData.setAddressBook(addressBook.get());
+        }
         return personRepository.save(personData);
     }
 
     /**
      * method to Update Person Data
      * @param : personDTO
+     * @param : addressBookID
      * @return : Updated Person Data
      */
     @Override
-    public Person updatePersonData(Long personID, PersonDTO personDTO) {
-        Person personData = this.getPersonDataById(personID);
+    public Person updatePersonData(Long addressBookID,Long personID, PersonDTO personDTO) {
+        Person personData = this.getPersonDataById(addressBookID,personID);
         personData.updatePerson(personDTO);
+        Optional<AddressBook> addressBook = addressBookRepository.findById(addressBookID);
+        if(addressBook.isPresent()){
+            personData.setAddressBook(addressBook.get());
+        }
         return personRepository.save(personData);
     }
 
     /**
      * method to delete person
      * @param : personID
+     * @param : addressBookID
      */
     @Override
-    public void deletePersonData(Long personID) {
-        personRepository.deleteById(personID);
+    public void deletePersonData(Long addressBookID,Long personID) {
+        Person person = this.getPersonDataById(addressBookID,personID);
+        personRepository.delete(person);
     }
 }

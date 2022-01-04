@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 /**
  * @RestController : Creating Controller Class
@@ -43,9 +44,9 @@ public class Personcontroller {
      * @param personID
      * @return ResponseEntity of Person Details of given ID
      */
-    @GetMapping("/get/{personID}")
-    public ResponseEntity<ResponseDTO> getContactByID(@PathVariable("personID") Long personID){
-        Person personData = interfacePerson.getPersonDataById(personID);
+    @GetMapping("/getByID")
+    public ResponseEntity<ResponseDTO> getContactByID(@RequestParam Long addressBookID ,@RequestParam Long personID){
+        Person personData = interfacePerson.getPersonDataById(addressBookID,personID);
         ResponseDTO responseDTO = new ResponseDTO("Get Call Success : ", personData);
         return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.OK);
         
@@ -56,9 +57,9 @@ public class Personcontroller {
      * @param personDTO
      * @return : ResponseEntity of Person data
      */
-    @PostMapping("/create")
-    public ResponseEntity<ResponseDTO> addingContact(@Valid @RequestBody PersonDTO personDTO){
-        Person personData = interfacePerson.createPersonData(personDTO);
+    @PostMapping("/create/{addressBookID}")
+    public ResponseEntity<ResponseDTO> addingContact(@PathVariable("addressBookID") Long addressBookID ,@Valid @RequestBody PersonDTO personDTO){
+        Person personData = interfacePerson.createPersonData(addressBookID,personDTO);
         ResponseDTO responseDTO = new ResponseDTO("Create Call Success : ", personData);
         return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.OK);
     }
@@ -69,8 +70,8 @@ public class Personcontroller {
      * @return : ResponseEntity of Updated Person
      */
     @PutMapping("/update/{personID}")
-    public ResponseEntity<ResponseDTO> updateContact(@Valid @RequestBody PersonDTO contactDTO,@PathVariable("personID") Long personID){
-        Person personData = interfacePerson.updatePersonData(personID,contactDTO);
+    public ResponseEntity<ResponseDTO> updateContact(@RequestParam Long addressBookID ,@Valid @RequestBody PersonDTO contactDTO,@PathVariable("personID") Long personID){
+        Person personData = interfacePerson.updatePersonData(addressBookID,personID,contactDTO);
         ResponseDTO responseDTO = new ResponseDTO("Update Call Success : ",personData);
         return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.OK);
     }
@@ -80,9 +81,9 @@ public class Personcontroller {
      * @param personID
      * @return :message showing delete ID
      */
-    @DeleteMapping("/delete/{personID}")
-    public ResponseEntity<ResponseDTO> deleteContactByID(@PathVariable("personID") Long personID){
-        interfacePerson.deletePersonData(personID);
+    @DeleteMapping("/delete")
+    public ResponseEntity<ResponseDTO> deleteContactByID(@RequestParam Long addressBookID ,@RequestParam Long personID){
+        interfacePerson.deletePersonData(addressBookID,personID);
         ResponseDTO responseDTO = new ResponseDTO("Deleted Successfull : ", personID);
         return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.OK);
     }

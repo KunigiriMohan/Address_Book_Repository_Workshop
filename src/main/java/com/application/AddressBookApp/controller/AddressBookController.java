@@ -2,6 +2,7 @@
 package com.application.AddressBookApp.controller;
 
 import java.util.List;
+import javax.validation.Valid;
 import com.application.AddressBookApp.dto.AddressBookDTO;
 import com.application.AddressBookApp.dto.ResponseDTO;
 import com.application.AddressBookApp.model.AddressBook;
@@ -14,10 +15,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-
 
 /**
  * @RestController : Defining Class as a RestController
@@ -67,7 +67,7 @@ public class AddressBookController {
      * @return : ResponseEntity of Created AddressBook
      */
     @PostMapping("/create")
-    public ResponseEntity<ResponseDTO> createAddressBook(AddressBookDTO addressBookDTO){
+    public ResponseEntity<ResponseDTO> createAddressBook(@Valid @RequestBody AddressBookDTO addressBookDTO){
         AddressBook addressBook = addressBookInterface.createAddressBook(addressBookDTO);
         ResponseDTO responseDTO = new ResponseDTO("Create Call Success ",addressBook);
         return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.OK);
@@ -80,7 +80,7 @@ public class AddressBookController {
      * @return : ResponseEntity of Updated AddressBook
      */
     @PutMapping("/update/{addressBookID}")
-    public ResponseEntity<ResponseDTO> updateAddressBook(AddressBookDTO addressBookDTO, @PathVariable("addressBookID") Long addressBookID){
+    public ResponseEntity<ResponseDTO> updateAddressBook(@Valid @RequestBody AddressBookDTO addressBookDTO, @PathVariable("addressBookID") Long addressBookID){
         AddressBook addressBook = addressBookInterface.updateAddressBookByID(addressBookID,addressBookDTO);
         ResponseDTO responseDTO = new ResponseDTO("Update Call Sucess ",addressBook);
         return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.OK);

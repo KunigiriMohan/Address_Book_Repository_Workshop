@@ -1,13 +1,12 @@
 package com.application.AddressBookApp.dto;
 
-import java.util.List;
+import javax.validation.constraints.Pattern;
 
-import com.application.AddressBookApp.model.Person;
 /**
  * AddressBook DTO Class 
  */
 public class AddressBookDTO {
-    public String addressBookName;
-    public List<Person> personList;
-    
+
+    @Pattern (regexp = "^[A-Z]{1}[a-zA-Z]{2,}$", message = "Address Book name is Invalid")
+    public String addressBookName; 
 }

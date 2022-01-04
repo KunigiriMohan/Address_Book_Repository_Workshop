@@ -1,11 +1,10 @@
 package com.application.AddressBookApp.service;
 
 import java.util.List;
-
 import com.application.AddressBookApp.dto.AddressBookDTO;
+import com.application.AddressBookApp.exceptions.AddressBookCustomException;
 import com.application.AddressBookApp.model.AddressBook;
 import com.application.AddressBookApp.repository.AddressBookRepository;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,7 +35,7 @@ public class AddressBookService implements AddressBookInterface{
      */
     @Override
     public AddressBook getAddressBookByID(Long addressBookID) {
-        return addressBookRepository.getById(addressBookID);
+        return addressBookRepository.findById(addressBookID).orElseThrow(()-> new AddressBookCustomException("Address Book ID Not Found"));
     }
 
     /**
@@ -63,7 +62,8 @@ public class AddressBookService implements AddressBookInterface{
      */
     @Override
     public void deleteAddressBookByID(Long addressBookID) {
-        addressBookRepository.deleteById(addressBookID);
+        AddressBook addressBook = this.getAddressBookByID(addressBookID);
+        addressBookRepository.delete(addressBook);
     }
     
 }
