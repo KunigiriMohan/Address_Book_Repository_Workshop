@@ -1,13 +1,19 @@
 package com.application.AddressBookApp.model;
 
 import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import com.application.AddressBookApp.dto.AddressBookDTO;
+import com.application.AddressBookApp.dto.PersonDTO;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -22,6 +28,8 @@ import lombok.NoArgsConstructor;
  * @Table : to Create table
  * @Data : To Auto Generated Getters and Setters
  * @NoArgsConstructor : Generating No Argument Constructor using Lombok
+ * @OneToMany : Creating one to many relationship
+ * @JoinColumn : Joining Column using Foreign Key
  */
 
 @Data
@@ -29,21 +37,23 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "address_book_table")
 public class AddressBook {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "addressBookID")
     private Long addressBookID;
 
-    @Column(name = "name")
+    @Column(name = "addressName")
     private String addressBookName;
 
-	@Column(name = "personList")
+	@OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "fk_address_ID",referencedColumnName = "addressBookID")
     private List<Person> personList;
 
     /**
      * Defining custom Constructor 
      * @param addressBookDTO
-     */
+    */
     public AddressBook(AddressBookDTO addressBookDTO){
         this.updateAddressBook(addressBookDTO);
     }
@@ -51,9 +61,10 @@ public class AddressBook {
     /**
      * Creating Method to define varaiables of modal class
      * @param addressBookDTO
-     */
+    */
     public void updateAddressBook(AddressBookDTO addressBookDTO){
         this.addressBookName = addressBookDTO.addressBookName;
         this.personList = addressBookDTO.personList;
+        
     }
 }
