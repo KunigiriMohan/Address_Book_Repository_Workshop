@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
  * @Override : Overriding implemented methods from interface
  */
 @Service
-public class AddressBookService implements AddressBookInterface{
+public class AddressBookService implements IAddressBookService{
 
     /**
      * Autowiring AddressBookRepository to Dependency injection to save in DB
