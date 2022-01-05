@@ -6,7 +6,7 @@ import javax.validation.Valid;
 import com.application.AddressBookApp.dto.AddressBookDTO;
 import com.application.AddressBookApp.dto.ResponseDTO;
 import com.application.AddressBookApp.model.AddressBook;
-import com.application.AddressBookApp.service.AddressBookInterface;
+import com.application.AddressBookApp.service.IAddressBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +36,7 @@ public class AddressBookController {
      * AutoWiring AddressBookInterace to Dependency Injection
      */
     @Autowired
-    AddressBookInterface addressBookInterface;
+    IAddressBookService addressBookInterface;
 
     /**
      * API for getting all AddressBook List
