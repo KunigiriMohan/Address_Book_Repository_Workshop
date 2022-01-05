@@ -9,8 +9,8 @@ public interface InterfacePerson {
      * Methods of Service Layer
      */
     List<Person> getPersonData();
-    Person getPersonDataById(Long addressBookID,Long personID);
+    Person getPersonDataById(Long personID);
     Person createPersonData(Long addressBookID,PersonDTO personDTO);
     Person updatePersonData(Long addressBookID,Long personID, PersonDTO personDTO);
-    void deletePersonData(Long addressBookID,Long personID);
+    void deletePersonData(Long personID);
 }

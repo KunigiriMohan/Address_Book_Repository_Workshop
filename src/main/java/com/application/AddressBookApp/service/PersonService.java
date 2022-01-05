@@ -40,7 +40,7 @@ public class PersonService implements InterfacePerson{
      * @return : Person details of particular ID
      */
     @Override
-    public Person getPersonDataById(Long addressBookID,Long personID) {
+    public Person getPersonDataById(Long personID) {
         return personRepository.findById(personID).orElseThrow(()-> new AddressBookCustomException("Person ID Not Found"));
     }
 
@@ -57,6 +57,9 @@ public class PersonService implements InterfacePerson{
         if(addressBook.isPresent()){
             personData.setAddressBook(addressBook.get());
         }
+        else{
+            throw new AddressBookCustomException("Address Book Not Found");
+        }
         return personRepository.save(personData);
     }
 
@@ -68,11 +71,14 @@ public class PersonService implements InterfacePerson{
      */
     @Override
     public Person updatePersonData(Long addressBookID,Long personID, PersonDTO personDTO) {
-        Person personData = this.getPersonDataById(addressBookID,personID);
+        Person personData = this.getPersonDataById(personID);
         personData.updatePerson(personDTO);
         Optional<AddressBook> addressBook = addressBookRepository.findById(addressBookID);
         if(addressBook.isPresent()){
             personData.setAddressBook(addressBook.get());
+        }
+        else{
+            throw new AddressBookCustomException("Address Book Not Found");
         }
         return personRepository.save(personData);
     }
@@ -80,11 +86,11 @@ public class PersonService implements InterfacePerson{
     /**
      * method to delete person
      * @param : personID
-     * @param : addressBookID
+      * @param : personID
      */
     @Override
-    public void deletePersonData(Long addressBookID,Long personID) {
-        Person person = this.getPersonDataById(addressBookID,personID);
+    public void deletePersonData(Long personID) {
+        Person person = this.getPersonDataById(personID);
         personRepository.delete(person);
     }
 }

@@ -9,7 +9,6 @@ import lombok.ToString;
  * @Pattern : Defining Regex Pattern
  * @NotNull : Showing error message if Variable entry is not present
  */
-
 public @ToString class PersonDTO {
     
     @Pattern (regexp = "^[A-Z]{1}[a-zA-Z]{2,}$", message = "Person first name is Invalid")
@@ -25,7 +24,7 @@ public @ToString class PersonDTO {
     @NotNull(message = "Phone Number can not be null")
     public String mobileNo;
 
-    @Pattern(regexp = "^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$", message = "Email is invalid")
+    @Pattern(regexp = "^[a-zA-Z0-9_+/#$%?~.-&*]+@[a-zA-Z0-9.-]+$", message = "Email is invalid")
     @NotNull(message = "Email should not empty")
     public String emailAddress;
 
