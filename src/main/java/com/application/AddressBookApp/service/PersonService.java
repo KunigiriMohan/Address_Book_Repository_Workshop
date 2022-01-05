@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
  * @Autowired : For Dependency Injection
  */
 @Service
-public class PersonService implements InterfacePerson{
+public class PersonService implements IPersonService{
     /**
      * AutoWiring for DependencyInjection
      */
