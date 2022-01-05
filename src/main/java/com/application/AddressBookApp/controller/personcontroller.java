@@ -45,8 +45,8 @@ public class Personcontroller {
      * @return ResponseEntity of Person Details of given ID
      */
     @GetMapping("/getByID")
-    public ResponseEntity<ResponseDTO> getContactByID(@RequestParam Long addressBookID ,@RequestParam Long personID){
-        Person personData = interfacePerson.getPersonDataById(addressBookID,personID);
+    public ResponseEntity<ResponseDTO> getContactByID(@RequestParam Long personID){
+        Person personData = interfacePerson.getPersonDataById(personID);
         ResponseDTO responseDTO = new ResponseDTO("Get Call Success : ", personData);
         return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.OK);
         
@@ -82,8 +82,8 @@ public class Personcontroller {
      * @return :message showing delete ID
      */
     @DeleteMapping("/delete")
-    public ResponseEntity<ResponseDTO> deleteContactByID(@RequestParam Long addressBookID ,@RequestParam Long personID){
-        interfacePerson.deletePersonData(addressBookID,personID);
+    public ResponseEntity<ResponseDTO> deleteContactByID(@RequestParam Long personID){
+        interfacePerson.deletePersonData(personID);
         ResponseDTO responseDTO = new ResponseDTO("Deleted Successfull : ", personID);
         return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.OK);
     }
