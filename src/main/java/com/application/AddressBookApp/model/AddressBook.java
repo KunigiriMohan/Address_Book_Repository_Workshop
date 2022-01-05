@@ -28,12 +28,12 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "address_book_table")
+@Table(name = "address_book_list")
 public class AddressBook {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "addressBookID")
+    @Column(name = "address_Book_ID")
     private Long addressBookID;
 
     private String addressBookName;
