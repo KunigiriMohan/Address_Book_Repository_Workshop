@@ -4,9 +4,12 @@ import java.util.List;
 import java.util.Optional;
 import com.application.AddressBookApp.dto.PersonDTO;
 import com.application.AddressBookApp.exceptions.AddressBookCustomException;
+import com.application.AddressBookApp.exceptions.PersonException;
 import com.application.AddressBookApp.model.*;
 import com.application.AddressBookApp.repository.AddressBookRepository;
 import com.application.AddressBookApp.repository.PersonRepository;
+import com.application.AddressBookApp.utility.JwtTokenUtil;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 /**
@@ -14,23 +17,35 @@ import org.springframework.stereotype.Service;
  * @Autowired : For Dependency Injection
  */
 @Service
-public class PersonService implements InterfacePerson{
+public class PersonService implements IPersonService{
     /**
      * AutoWiring for DependencyInjection
      */
     @Autowired
     PersonRepository personRepository;
 
+    /**
+     * Autowiring addressBookRepository 
+     */
     @Autowired
     AddressBookRepository addressBookRepository;
+
+    /**
+     * Autowiring JwtTokenUtil class
+     */
+    @Autowired
+    JwtTokenUtil jwtTokenUtil;
 
     /**
      * method to Show all Person Details in AddressBook
      * @return : Entered Person Data
      */
     @Override
-    public List<Person> getPersonData() {
-        return personRepository.findAll();
+    public List<Person> getPersonData(String token) {
+        if (jwtTokenUtil.isValidToken(token)){
+            return personRepository.findAll();
+        }
+        else throw new PersonException("Token is not Valid");
     }
 
     /**
@@ -40,8 +55,11 @@ public class PersonService implements InterfacePerson{
      * @return : Person details of particular ID
      */
     @Override
-    public Person getPersonDataById(Long personID) {
-        return personRepository.findById(personID).orElseThrow(()-> new AddressBookCustomException("Person ID Not Found"));
+    public Person getPersonDataById(Long personID,String token) {
+        if(jwtTokenUtil.isValidToken(token)){
+            return personRepository.findById(personID).orElseThrow(()-> new PersonException("Person ID Not Found"));
+        }
+        else throw new PersonException("Token is not Valid");
     }
 
     /**
@@ -51,16 +69,20 @@ public class PersonService implements InterfacePerson{
      * @return : Entered Person Data
      */
     @Override
-    public Person createPersonData(Long addressBookID,PersonDTO personDTO) {
-        Person personData = new Person(personDTO);
-        Optional<AddressBook> addressBook = addressBookRepository.findById(addressBookID);
-        if(addressBook.isPresent()){
-            personData.setAddressBook(addressBook.get());
+    public Person createPersonData(Long addressBookID,PersonDTO personDTO,String token) {
+        if(jwtTokenUtil.isValidToken(token)){
+            Person personData = new Person(personDTO);
+            Optional<AddressBook> addressBook = addressBookRepository.findById(addressBookID);
+                if(addressBook.isPresent()){
+                    personData.setAddressBook(addressBook.get());
+                }
+                else{
+                    throw new AddressBookCustomException("Address Book Not Found");
+                }
+            return personRepository.save(personData);
         }
-        else{
-            throw new AddressBookCustomException("Address Book Not Found");
-        }
-        return personRepository.save(personData);
+        else throw new PersonException("Token is not Valid");
+        
     }
 
     /**
@@ -70,17 +92,20 @@ public class PersonService implements InterfacePerson{
      * @return : Updated Person Data
      */
     @Override
-    public Person updatePersonData(Long addressBookID,Long personID, PersonDTO personDTO) {
-        Person personData = this.getPersonDataById(personID);
-        personData.updatePerson(personDTO);
-        Optional<AddressBook> addressBook = addressBookRepository.findById(addressBookID);
-        if(addressBook.isPresent()){
-            personData.setAddressBook(addressBook.get());
-        }
-        else{
-            throw new AddressBookCustomException("Address Book Not Found");
-        }
+    public Person updatePersonData(Long addressBookID,Long personID, PersonDTO personDTO,String token) {
+        if (jwtTokenUtil.isValidToken(token)){
+            Person personData = this.getPersonDataById(personID,token);
+            personData.updatePerson(personDTO);
+            Optional<AddressBook> addressBook = addressBookRepository.findById(addressBookID);
+            if(addressBook.isPresent()){
+                personData.setAddressBook(addressBook.get());
+            }
+            else{
+                throw new AddressBookCustomException("Address Book Not Found");
+            }
         return personRepository.save(personData);
+        }
+        else throw new PersonException("Token is not Valid");
     }
 
     /**
@@ -89,8 +114,11 @@ public class PersonService implements InterfacePerson{
       * @param : personID
      */
     @Override
-    public void deletePersonData(Long personID) {
-        Person person = this.getPersonDataById(personID);
-        personRepository.delete(person);
+    public void deletePersonData(Long personID,String token) {
+        if (jwtTokenUtil.isValidToken(token)){
+            Person person = this.getPersonDataById(personID,token);
+            personRepository.delete(person);
+        }
+        else throw new PersonException("Token is not Valid");
     }
 }
