@@ -34,9 +34,9 @@ public class Person {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "personID")
+    @Column(name = "person_ID")
     private Long personID;
-    @Column(name = "name")
+    @Column(name = "first_Name")
     private String firstName;
     private String lastName;
     private String gender;
@@ -49,7 +49,7 @@ public class Person {
     private String profilePic;
 
     @ManyToOne
-    @JoinColumn(name = "fk_person_ID",referencedColumnName = "addressBookID")
+    @JoinColumn(name = "fk_address_Book_ID",referencedColumnName = "address_Book_ID")
     private AddressBook addressBook;
 
     /**
