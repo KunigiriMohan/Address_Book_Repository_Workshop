@@ -6,6 +6,7 @@ import javax.validation.Valid;
 import com.application.AddressBookApp.dto.AddressBookDTO;
 import com.application.AddressBookApp.dto.ResponseDTO;
 import com.application.AddressBookApp.model.AddressBook;
+import com.application.AddressBookApp.model.User;
 import com.application.AddressBookApp.service.IAddressBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,7 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @Valid : Checking Requested bean is valid or not
  */
 @RestController
-@RequestMapping("/Addressbook")
+@RequestMapping("/addressbook")
 public class AddressBookController {
     /**
      * AutoWiring AddressBookInterace to Dependency Injection
@@ -42,10 +44,10 @@ public class AddressBookController {
      * API for getting all AddressBook List
      * @return : ResponseEntity of AddressBook List
      */
-    @GetMapping("/getAll")
-    public ResponseEntity<ResponseDTO> getAddressBookDetailsDetails(){
-        List<AddressBook> addressBooks = addressBookService.getAllAddressBook();
-        ResponseDTO responseDTO = new ResponseDTO("Get Call Success ", addressBooks);
+    @GetMapping("/getall")
+    public ResponseEntity<ResponseDTO> getAddressBookDetailsDetails(@RequestHeader String token){
+        List<AddressBook> addressBooks = addressBookService.getAllAddressBook(token);
+        ResponseDTO responseDTO = new ResponseDTO("Get Call Success ", addressBooks, HttpStatus.OK);
         return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.OK);
     }
 
@@ -54,11 +56,11 @@ public class AddressBookController {
      * @param addressBookID
      * @return : ResponseEntity of AddressBook
      */
-    @GetMapping("/getByID/{addressBookID}")
-    public ResponseEntity<ResponseDTO> getAddressBookDetailsByID(@PathVariable("addressBookID") Long addressBookID){
-        AddressBook addressBook = addressBookService.getAddressBookByID(addressBookID);
-        ResponseDTO responseDTO = new ResponseDTO("Get Call Success ",addressBook);
-        return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);
+    @GetMapping("/getbyid/{addressBookID}")
+    public ResponseEntity<ResponseDTO> getAddressBookDetailsByID(@PathVariable("addressBookID") Long addressBookID ,@RequestHeader String token){
+        AddressBook addressBook = addressBookService.getAddressBookByID(addressBookID,token);
+        ResponseDTO responseDTO = new ResponseDTO("Get Call Success ",addressBook, HttpStatus.OK);
+        return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.OK);
     }
 
     /**
@@ -67,9 +69,9 @@ public class AddressBookController {
      * @return : ResponseEntity of Created AddressBook
      */
     @PostMapping("/create")
-    public ResponseEntity<ResponseDTO> createAddressBook(@Valid @RequestBody AddressBookDTO addressBookDTO){
-        AddressBook addressBook = addressBookService.createAddressBook(addressBookDTO);
-        ResponseDTO responseDTO = new ResponseDTO("Create Call Success ",addressBook);
+    public ResponseEntity<ResponseDTO> createAddressBook(@Valid @RequestBody AddressBookDTO addressBookDTO,@RequestHeader String token){
+        AddressBook addressBook = addressBookService.createAddressBook(addressBookDTO,token);
+        ResponseDTO responseDTO = new ResponseDTO("Create Call Success ",addressBook, HttpStatus.OK);
         return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.OK);
     }
 
@@ -80,9 +82,9 @@ public class AddressBookController {
      * @return : ResponseEntity of Updated AddressBook
      */
     @PutMapping("/update/{addressBookID}")
-    public ResponseEntity<ResponseDTO> updateAddressBook(@Valid @RequestBody AddressBookDTO addressBookDTO, @PathVariable("addressBookID") Long addressBookID){
-        AddressBook addressBook = addressBookService.updateAddressBookByID(addressBookID,addressBookDTO);
-        ResponseDTO responseDTO = new ResponseDTO("Update Call Sucess ",addressBook);
+    public ResponseEntity<ResponseDTO> updateAddressBook(@Valid @RequestBody AddressBookDTO addressBookDTO, @PathVariable("addressBookID") Long addressBookID,@RequestHeader String token){
+        AddressBook addressBook = addressBookService.updateAddressBookByID(addressBookID,addressBookDTO,token);
+        ResponseDTO responseDTO = new ResponseDTO("Update Call Sucess ",addressBook, HttpStatus.OK);
         return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.OK);
     }
 
@@ -91,10 +93,35 @@ public class AddressBookController {
      * @param addressBookID
      * @return : Response Entity of Deleted AddressBook ID
      */
-    @DeleteMapping("/deleteByID/{addressBookID}")
-    public ResponseEntity<ResponseDTO> deleteAddressBookID(@PathVariable("addressBookID") Long addressBookID){
-        addressBookService.deleteAddressBookByID(addressBookID);
-        ResponseDTO responseDTO = new ResponseDTO("Delete Call Sucess ",addressBookID);
+    @DeleteMapping("/deletebyid/{addressBookID}")
+    public ResponseEntity<ResponseDTO> deleteAddressBookID(@PathVariable("addressBookID") Long addressBookID,@RequestHeader String token){
+        addressBookService.deleteAddressBookByID(addressBookID,token);
+        ResponseDTO responseDTO = new ResponseDTO("Delete Call Sucess ",addressBookID, HttpStatus.OK);
         return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.OK);
     }
+
+    /**
+     * API for Registering User 
+     * @param user
+     * @return : Response Entity of User Details
+     */
+    @PostMapping("/registeruser")
+    public ResponseEntity<ResponseDTO> generateUser(@RequestBody User user){
+        User userDetailUser = addressBookService.createUser(user);
+        ResponseDTO responseDTO = new ResponseDTO("Create Call Success ",userDetailUser, HttpStatus.OK);
+        return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.OK);
+    }
+
+    /**
+     * API for Registering User 
+     * @param user
+     * @return : Response Entity of token
+     */
+    @GetMapping("/token")
+    public ResponseEntity<ResponseDTO> loginUser(@RequestBody User user){
+        String userDetailUser = addressBookService.generateToken(user);
+        ResponseDTO responseDTO = new ResponseDTO("Create Call Success ",userDetailUser, HttpStatus.OK);
+        return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.OK);
+    }
+   
 }

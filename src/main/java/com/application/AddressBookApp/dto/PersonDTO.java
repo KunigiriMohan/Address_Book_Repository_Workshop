@@ -24,7 +24,7 @@ public @ToString class PersonDTO {
     @NotNull(message = "Phone Number can not be null")
     public String mobileNo;
 
-    @Pattern(regexp = "^[a-zA-Z0-9_+/#$%?~.-&*]+@[a-zA-Z0-9.-]+$", message = "Email is invalid")
+    @Pattern(regexp = "^[a-zA-Z0-9_+/#$%?~.-]+@[a-zA-Z0-9.-]+$", message = "Email is invalid")
     @NotNull(message = "Email should not empty")
     public String emailAddress;
 
